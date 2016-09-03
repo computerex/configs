@@ -20,6 +20,7 @@ Plugin 'Shougo/vimproc.vim'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
 Plugin 'maksimr/vim-jsbeautify'
+Plugin 'tpope/vim-fugitive'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -49,8 +50,9 @@ nmap ,w :bd<CR>
 set guifont=Consolas:h12:cANSI
 color buddy 
 set shortmess+=A
-set smartcase
+set ic
 map <c-f> :call JsBeautify()<cr>
 let g:fuf_help_cache_dir = ''
 let g:fuf_tag_cache_dir = ''
 let g:fuf_taggedfile_cache_dir = ''
+let g:airline_powerline_fonts = 1
