@@ -2,7 +2,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=C:\vimfiles\bundle\Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -12,7 +12,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Townk/vim-autoclose'
 Plugin 'scrooloose/nerdtree'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'vim-airline/vim-airline'
@@ -29,9 +28,16 @@ Plugin 'SirVer/ultisnips'
 Plugin 'vim-syntastic/syntastic'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
-Plugin 'ternjs/tern_for_vim'
 Plugin 'fatih/vim-go'
 Plugin 'python-mode/python-mode'
+Plugin 'kien/ctrlp.vim'
+Plugin 'zcodes/vim-colors-basic'
+Plugin 'dikiaap/minimalist'
+Plugin 'othree/xml.vim'
+Plugin 'millermedeiros/vim-esformatter'
+Plugin 'ruanyl/vim-fixmyjs'
+Plugin 'mxw/vim-jsx'
+Plugin 'airblade/vim-gitgutter' 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -63,7 +69,6 @@ map <c-f> :call JsBeautify()<cr>
 let g:fuf_help_cache_dir = ''
 let g:fuf_tag_cache_dir = ''
 let g:fuf_taggedfile_cache_dir = ''
-setl autoread
 nmap <leader>ne :NERDTree<cr>
 map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR> 
 let g:Omnisharp_start_server = 0
@@ -84,10 +89,10 @@ let g:OmniSharp_timeout = 1
 set noshowmatch
 
 "Super tab settings - uncomment the next 4 lines
-"let g:SuperTabDefaultCompletionType = 'context'
-"let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
-"let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
-"let g:SuperTabClosePreviewOnPopupClose = 1
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
+let g:SuperTabClosePreviewOnPopupClose = 1
 
 "don't autoselect first item in omnicomplete, show if only one item (for preview)
 "remove preview if you don't want to see any documentation whatsoever.
@@ -96,7 +101,7 @@ set completeopt=longest,menuone,preview
 " There is a performance penalty with this (especially on Mono)
 " By default, only Type/Method signatures are fetched. Full documentation can still be fetched when
 " you need it with the :OmniSharpDocumentation command.
-" let g:omnicomplete_fetch_documentation=1
+let g:omnicomplete_fetch_documentation=1
 
 "Move the preview window (code documentation) to the bottom of the screen, so it doesn't move the code!
 "You might also want to look at the echodoc plugin
@@ -122,7 +127,7 @@ augroup omnisharp_commands
     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
     " Automatically add new cs files to the nearest project on save
-    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+    "autocmd BufWritePost *.cs call OmniSharp#AddToProject()
 
     "show type information automatically when the cursor stops moving
     autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
@@ -142,9 +147,9 @@ augroup omnisharp_commands
     autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
     autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
     "navigate up by method/property/field
-    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+    "autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
     "navigate down by method/property/field
-    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+    "autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
 
 augroup END
 
@@ -215,10 +220,16 @@ nnoremap <leader>imprr :-1read ~/snippets/imprr.js<cr>
 nnoremap <leader>reactapp :-1read ~/snippets/reactapp.js<cr>
 nnoremap <leader>andir :-1read ~/snippets/andir.js<cr>
 
+nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <leader>setjs :set filetype=javascript<cr>
+nnoremap <leader>setft :set filetype=
+nnoremap <leader>qa :bufdo bd<cr>
+
 set t_Co=256
 syntax on
+syntax enable
 set background=dark
-colorscheme monokai 
+colorscheme monokai
 "autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 "set omnifunc=syntaxcomplete#Complete
 let g:tern#is_show_argument_hints_enabled = 1
@@ -238,3 +249,41 @@ au FileType go nmap <leader>gd <Plug>(go-doc)
 au FileType go nmap <leader>s <Plug>(go-implements)
 
 let g:syntastic_javascript_checkers = ['eslint']
+au BufNewFile,BufRead *.xaml setf xml
+au BufNewFile,BufRead *.cs setf cs 
+
+nnoremap <silent> <leader>es :Esformatter<CR>
+vnoremap <silent> <leader>es :EsformatterVisual<CR>
+nnoremap <Leader>fix :Fixmyjs<cr>
+nnoremap <F5> :silent! bufdo e<cr>
+set confirm
+
+let g:fixmyjs_rc_path = 'C:\Users\mali\.eslintrc'
+let g:jsx_ext_required = 0
+set hlsearch
+set incsearch
+nnoremap <silent> <Leader>= :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>0 :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nnoremap <silent> <Leader>9 :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set nornu
+  else
+    set rnu
+  endif
+endfunc
+
+nnoremap <silent> <Leader>num :call NumberToggle()<cr>
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-Q> <C-W><C-Q>
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*\\dist\\*  " Windows
+
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn|dll))$'
+
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
