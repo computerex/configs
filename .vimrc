@@ -62,7 +62,7 @@ nmap ,b :FufBuffer<CR>
 "nmap ,f :FufFile<CR>
 nmap ,f :FufFileWithFullCwd **/<CR>
 nmap ,w :bd<CR>
-set guifont=Consolas:h12:cANSI
+set guifont=Fira\ Mono\ For\ Powerline:h14
 set shortmess+=A
 set ic
 map <c-f> :call JsBeautify()<cr>
