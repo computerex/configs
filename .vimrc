@@ -1,8 +1,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=C:\vimfiles\bundle\Vundle.vim
-call vundle#begin('C:\vimplugins')
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -24,12 +23,11 @@ Plugin 'tpope/vim-fugitive'
 "Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'scrooloose/nerdcommenter'
 " Track the engine.
-Plugin 'SirVer/ultisnips'
 Plugin 'vim-syntastic/syntastic'
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
 Plugin 'fatih/vim-go'
-Plugin 'python-mode/python-mode'
+"Plugin 'python-mode/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'zcodes/vim-colors-basic'
 Plugin 'dikiaap/minimalist'
@@ -37,9 +35,13 @@ Plugin 'othree/xml.vim'
 Plugin 'millermedeiros/vim-esformatter'
 Plugin 'ruanyl/vim-fixmyjs'
 Plugin 'mxw/vim-jsx'
-Plugin 'airblade/vim-gitgutter' 
+Plugin 'airblade/vim-gitgutter'
 Plugin 'suan/vim-instant-markdown'
 Plugin 'ervandew/supertab'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'Quramy/tsuquyomi'
+Plugin 'heavenshell/vim-pydocstring'
+Plugin 'Chiel92/vim-autoformat'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -64,7 +66,7 @@ nmap ,b :FufBuffer<CR>
 "nmap ,f :FufFile<CR>
 nmap ,f :FufFileWithFullCwd **/<CR>
 nmap ,w :bd<CR>
-set guifont=Fira\ Mono\ For\ Powerline:h11
+set guifont=Fira\ Mono\ For\ Powerline:h14
 set shortmess+=A
 set ic
 map <c-f> :call JsBeautify()<cr>
@@ -72,18 +74,21 @@ let g:fuf_help_cache_dir = ''
 let g:fuf_tag_cache_dir = ''
 let g:fuf_taggedfile_cache_dir = ''
 nmap <leader>ne :NERDTree<cr>
-map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR> 
+nmap <leader>f :grep -Rin --exclude "*node_modules*" --exclude "*dist*" --include "*.js" --include "*.cs" --include "*.sql"
+nmap <leader>[ :cprev <cr>
+nmap <leader>] :cnext <cr>
+map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 filetype plugin on
 set noshowmatch
 set splitbelow
 " Get Code Issues and syntax errors
 let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 0 
+let g:airline#extensions#tabline#buffer_nr_show = 0
 
 augroup reload_vimrc " {
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  autocmd!
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END " }
 
 set number
@@ -117,8 +122,8 @@ syntax on
 syntax enable
 set background=dark
 colorscheme monokai
-"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"set omnifunc=syntaxcomplete#Complete
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+set omnifunc=syntaxcomplete#Complete
 let g:tern#is_show_argument_hints_enabled = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
@@ -137,7 +142,7 @@ au FileType go nmap <leader>s <Plug>(go-implements)
 
 let g:syntastic_javascript_checkers = ['eslint']
 au BufNewFile,BufRead *.xaml setf xml
-au BufNewFile,BufRead *.cs setf cs 
+au BufNewFile,BufRead *.cs setf cs
 
 nnoremap <silent> <leader>es :Esformatter<CR>
 vnoremap <silent> <leader>es :EsformatterVisual<CR>
@@ -168,7 +173,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-Q> <C-W><C-Q>
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*\\dist\\*  " Windows
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*\\dist\\*,*\\node_modules\\*  " Windows
 
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn|dll))$'
 
@@ -180,10 +185,17 @@ set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
 set guioptions-=L  "remove left-hand scroll bar
 
-vnoremap <C-c> "*y
-nnoremap <leader>p "+gP
+"vnoremap <C-c> "*y
+"nnoremap <leader>v "+gP
 nnoremap <leader>dos :e ++ff=dos<cr>
 let g:syntastic_enable_cucumber_checker = 0
 autocmd BufEnter *.md exe 'noremap <F5> :!start C:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
 nnoremap gR gD:%s/<C-R>///gc<left><left><left>
 :imap jk <Esc>
+
+augroup autoquickfix
+  autocmd!
+  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd QuickFixCmdPost    l* lwindow
+augroup END
+au BufWrite * :Autoformat
