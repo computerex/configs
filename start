@@ -1,0 +1,4 @@
+sudo sh ~/.local/bin/lid.sh
+sudo sh ~/.local/bin/mouse.sh
+sudo powertop --auto-tune
+xmodmap -e "keysym Caps_Lock = Mode_switch Mode_switch"
